@@ -1,8 +1,10 @@
 import db from "../config/database.js";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 async function getCars() {
-  const data = await db.query(`SELECT * FROM cars`);
-  return data.rows;
+  const cars = prisma.cars.findMany();
+  return cars;
 }
 
 async function getCar(id: number) {
@@ -11,11 +13,18 @@ async function getCar(id: number) {
 }
 
 async function getCarWithLicensePlate(licensePlate: string) {
-  const data = await db.query(`SELECT * FROM cars WHERE "licensePlate" = $1`, [licensePlate]);
+  const data = await db.query(`SELECT * FROM cars WHERE "licensePlate" = $1`, [
+    licensePlate,
+  ]);
   return data.rows[0];
 }
 
-async function createCar(model: string, licensePlate: string, year: number, color: string) {
+async function createCar(
+  model: string,
+  licensePlate: string,
+  year: number,
+  color: string
+) {
   await db.query(
     `INSERT INTO cars (model, "licensePlate", year, color)
      VALUES ($1, $2, $3, $4)`,
@@ -32,7 +41,7 @@ const carRepository = {
   getCarWithLicensePlate,
   getCars,
   createCar,
-  deleteCar
-}
+  deleteCar,
+};
 
 export default carRepository;
