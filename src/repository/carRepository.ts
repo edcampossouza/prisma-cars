@@ -8,15 +8,15 @@ async function getCars() {
 }
 
 async function getCar(id: number) {
-  const data = await db.query(`SELECT * FROM cars WHERE id = $1`, [id]);
-  return data.rows[0];
+  const car = prisma.cars.findUnique({ where: { id: id } });
+  return car;
 }
 
 async function getCarWithLicensePlate(licensePlate: string) {
-  const data = await db.query(`SELECT * FROM cars WHERE "licensePlate" = $1`, [
-    licensePlate,
-  ]);
-  return data.rows[0];
+  const data = prisma.cars.findUnique({
+    where: { licensePlate: licensePlate },
+  });
+  return data;
 }
 
 async function createCar(
