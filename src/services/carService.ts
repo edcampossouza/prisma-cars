@@ -21,7 +21,6 @@ async function createCar(model: string, licensePlate: string, year: number, colo
   if (car) {
     throw conflictError(`Car with license plate ${licensePlate} already registered.`)
   }
-
   await carRepository.createCar(model, licensePlate, year, color);
 }
 
